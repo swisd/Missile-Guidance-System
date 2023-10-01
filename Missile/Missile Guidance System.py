@@ -1,10 +1,9 @@
-# Missile Guidance System.py
+#Missile Guidance System.py
 
 
 from LNmain import LNRmain as LNR
 import time
 import math
-import psutil
 
 virt_alt = 1
 valueError = "Error. Impossible values."
@@ -16,6 +15,8 @@ spd = 0
 thr = 0
 ws = [0, 0]
 atp = 14.7  # ASL
+eng_ves_a = 0
+eng_vec_b = 0
 position = int(input("Start POS: "))
 target = int(input("TGT POS: "))
 tgt_alt = int(input("TGT ALT: "))
@@ -36,8 +37,8 @@ def course():
     pass
 
 def info():
-    print("CPUs:", LNR.cpu_count(), "  CPU Type:", "---", "  VT:", LNR._VT, "  CPU Temp:", "N/A")
-
+    print("CPU Cores:", LNR.cpu_count(), "  CPU Type:", "11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00 GHz", "  VT:", LNR._VT, "  CPU Temp:", "N/A")
+    print("GPU Cores:", "N/A", "  GPU Type:", "Intel(R) Iris(R) Xe Graphics", "  VT:", LNR._KT_co, "  GPU Temp:", "N/A")
 
 
 virt_dist = target / 5
@@ -46,6 +47,8 @@ vdc = virt_dist * 3
 vdd = virt_dist * 4
 stat()
 info()
+
+#DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
 
 while position != target and alt != tgt_alt:
     if target > position:
@@ -78,6 +81,8 @@ while position != target and alt != tgt_alt:
         course) + "  ALT: " + str(round(alt)) + "ft" + "  TGT ALT: " + str(tgt_alt) + "ft  ")
     print(f'\r{pct}', end='')
     time.sleep(step)
+
+#Hit confirmation output / define
 
 def error():
     print(valueError)
