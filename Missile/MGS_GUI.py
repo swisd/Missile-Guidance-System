@@ -35,8 +35,7 @@ def stat():
     print("ARC: " + arc + "  Curve: " + curve + "  Method: " + method + "  PATH: " + str(path))
 
 
-def course(dP, dM, Sa):
-    return 'Course INT:', (dP*2/(dM*dP))/((dM**2)/Sa)
+def course():
     pass
 
 def info():
@@ -50,8 +49,6 @@ vdc = virt_dist * 3
 vdd = virt_dist * 4
 stat()
 info()
-
-print(course(524, 216, 158))
 
 thr: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), thr, 100, thr)
 #DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
@@ -118,6 +115,5 @@ if position == target:
     print(position, poscur, target, "Hit")
     time.sleep(0.1)
     detonate()
-dps = (missilePosition/missileTarget*2)
 
-print(missilePosition, missileTarget, math.sqrt(dps))
+print(missilePosition, missileTarget)

@@ -17,5 +17,8 @@ class Command():
           return Tc
     pass
 
+    def __RTG_KT_CO_VT_DP__(self, vt, vr, ac, ):
+        pass
+
 class Action():
     pass
