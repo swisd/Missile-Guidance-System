@@ -9,6 +9,9 @@ import math
 
 virt_alt = 1
 valueError = "Error. Impossible values."
+
+"""
+For use in future developments.
 pitch = 0
 roll = 0
 yaw = 0
@@ -19,6 +22,7 @@ ws = [0, 0]
 atp = 14.7  # ASL
 eng_ves_a = 0
 eng_vec_b = 0
+"""
 position = int(input("Start POS: "))
 target = int(input("TGT POS: "))
 tgt_alt = int(input("TGT ALT: "))

@@ -2,6 +2,9 @@
 
 
 from LNmain import LNRmain as LNR
+#Future GUI Development
+
+"""
 import time
 import corrective_commands
 import file_actions
@@ -116,4 +119,4 @@ if position == target:
     time.sleep(0.1)
     detonate()
 
-print(missilePosition, missileTarget)
+print(missilePosition, missileTarget)"""
