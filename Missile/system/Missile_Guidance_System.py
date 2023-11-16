@@ -2,7 +2,6 @@
 """Missile Guidance System"""
 
 import math
-import os
 import platform
 import time
 import LNRmain as LNR
@@ -70,7 +69,7 @@ def course(dP: int, dM: int, Sa: int) -> object:
 	return 'Course INT:', (dP * 2 / (dM * dP)) / ((dM ** 2) / Sa)
 
 
-def info() -> object:
+def info():
 	"""
 	Information about host device.
 	:rtype: object
@@ -125,12 +124,16 @@ while position != target and alt != tgt_alt:
 	
 	if position < virt_dist:
 		alt = alt + virt_dist * 0.08
+	
 	elif virt_dist < position < vdb:
 		alt = alt + virt_dist * 0.16
+	
 	elif vdb < position < vdc:
 		alt = alt + 0
+	
 	elif position > vdc:
 		alt = alt - virt_dist * 0.12
+	
 	pct: str = str("CPOS: " + str(position) + "  ID: " + str(poscur) + "  TGT: " + str(target) + "  CRS: " + str(course)
 				   + "  ALT: " + str(round(alt)) + "ft" + "  TGT ALT: " + str(tgt_alt) + "ft  " + "THR: " + str(thr))
 	print(f'\r{pct}', end='')
@@ -185,4 +188,3 @@ else:
 	pass
 
 print('Missile Guidance System MSL-GUID-REV2-V2.1.3 ©2023 swisd')
-

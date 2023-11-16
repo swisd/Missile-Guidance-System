@@ -1,8 +1,9 @@
-#Missile Guidance System.py
+# Missile Guidance System.py
 
 
 from LNmain import LNRmain as LNR
-#Future GUI Development
+
+# Future GUI Development
 
 """
 import time
