@@ -1,3 +1,7 @@
+"""Definitions"""
+#General Constants
+
+"""
 pitch = 0
 roll = 0
 yaw = 0
@@ -20,3 +24,4 @@ wp_c = 0
 wp_c_alt = 0
 wp_d = 0
 wp_d_alt = 0
+"""

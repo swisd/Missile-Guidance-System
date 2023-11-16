@@ -2,9 +2,9 @@
 """Missile Guidance System"""
 
 import math
+import os
 import platform
 import time
-import LNRmain as LNR
 import Missile.res.corrective_commands as corrective_commands
 import Missile.res.file_actions as file_actions
 import Missile.guidance.dataInjector as dataInjector
@@ -77,15 +77,15 @@ def info():
 	print("System Data:")
 	print("  System:", platform.system())
 	print("  CPU:")
-	print("    CPU Cores:", LNR.cpu_count())
+	print("    CPU Cores:", os.cpu_count())
 	print("    CPU Type:", "11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00 GHz")
 	print("    Desc:", platform.processor())
-	print("    VT:", LNR._VT)
+	print("    VT:", '~_VT')
 	print("    CPU Temp:", "N/A")
 	print("  GPU:")
 	print("    GPU Cores:", "N/A")
 	print("    GPU Type:", "Intel(R) Iris(R) Xe Graphics")
-	print("    VT:", LNR._KT_co)
+	print("    VT:", '+_KT_co')
 	print("    GPU Temp:", "N/A")
 	print()
 
