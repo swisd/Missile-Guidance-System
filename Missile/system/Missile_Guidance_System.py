@@ -190,4 +190,4 @@ if dataClear == 'y' or dataClear == 'Y':
 else:
     pass
 
-print('Missile Guidance System MSL-GUID-REV2-V2.1.3 ©2023 swisd')
+print('Missile Guidance System MSL-GUID-REV2-V2.4.6 ©2023 swisd')
