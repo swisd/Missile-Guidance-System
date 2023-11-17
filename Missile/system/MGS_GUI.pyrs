@@ -1,5 +1,9 @@
-"""Missile Guidance System"""
 # Missile Guidance System.py
+
+
+from LNmain import LNRmain as LNR
+
+# Future GUI Development
 
 import math
 import os
@@ -108,40 +112,40 @@ thr: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.
 while position != target and alt != tgt_alt:
     if target > position:
         poscur: int = target - position
-    
+
     elif target < position:
         poscur: int = position - target
-    
+
     if poscur == target:
         position += 1
         course: bool = False
-    
+
     elif poscur < target:
         course: bool = True
         position += 1
-    
+
     elif poscur > target:
         course: bool = True
         position -= 1
-    
+
     if position < virt_dist:
         alt += virt_dist * 0.08
-    
+
     elif virt_dist < position < vdb:
         alt += virt_dist * 0.16
-    
+
     elif vdb < position < vdc:
         alt += 0
-    
+
     elif position > vdc:
         alt -= virt_dist * 0.12
-    
+
     #Throttle Control
     if (position + 300) <= target:
         thr = 0
     else:
         pass
-    
+
     pct: str = str(
         "CPOS: " + str(position) + "  ID: " + str(poscur) + "  TGT: "
         + str(target) + "  CRS: " + str(course) + "  ALT: "
@@ -199,3 +203,4 @@ else:
     pass
 
 print('Missile Guidance System MSL-GUID-REV2-V2.4.6 ©2023 swisd')
+

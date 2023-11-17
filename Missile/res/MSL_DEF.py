@@ -1,3 +1,5 @@
+""" """
+"""
 class AGMX354D():
     @property
     def center(call: str) -> object:
@@ -141,4 +143,4 @@ class AGMX354D():
             return loc_y
         elif call == loc_z:
             return loc_z
-
+"""
