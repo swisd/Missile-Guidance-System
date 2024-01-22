@@ -1,5 +1,4 @@
-#file_actions.py
-
+"""File Actions"""
 
 def writefile(data: object, location: object) -> object:
     """

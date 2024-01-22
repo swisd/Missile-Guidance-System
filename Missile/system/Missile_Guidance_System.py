@@ -22,7 +22,7 @@ yaw = 0
 alt: int = 0
 """
 spd = 0"""
-thr = 0
+THR = 0
 """
 ws = [0, 0]
 atp = 14.7  # ASL
@@ -36,11 +36,11 @@ anti: str = str(input("AT/AS: "))
 step = float(input("TS: "))
 missile: str = str(input("Type: "))
 
-version = '2.4.6'
-revision = 'MSL-GUID-REV2'
-name = 'Missile Guidance System'
-author = 'swisd'
-copyright = '2024'
+VERSION = '2.4.6'
+REVISION = 'MSL-GUID-REV2'
+NAME = 'Missile Guidance System'
+AUTHOR = 'swisd'
+COPYRIGHT = '2024'
 
 
 def stat():
@@ -107,52 +107,42 @@ info()
 
 print(course(524, 216, 158))
 
-thr: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), thr, 100, thr)
+THR: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), THR, 100, THR)
 # DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
 # noinspection SpellCheckingInspection
 
 while position != target and alt != tgt_alt:
     if target > position:
         poscur: int = target - position
-    
     elif target < position:
         poscur: int = position - target
-    
     if poscur == target:
         position += 1
         course: bool = False
-    
     elif poscur < target:
         course: bool = True
         position += 1
-    
     elif poscur > target:
         course: bool = True
         position -= 1
-    
     if position < virt_dist:
         alt += virt_dist * 0.08
-    
     elif virt_dist < position < vdb:
         alt += virt_dist * 0.16
-    
     elif vdb < position < vdc:
         alt += 0
-    
     elif position > vdc:
         alt -= virt_dist * 0.12
-    
     #Throttle Control
     if (position + 300) <= target:
-        thr = 0
+        THR: int = 0
     else:
         pass
-    
     pct: str = str(
         "CPOS: " + str(position) + "  ID: " + str(poscur) + "  TGT: "
         + str(target) + "  CRS: " + str(course) + "  ALT: "
         + str(round(alt)) + "ft" + "  TGT ALT: " + str(tgt_alt)
-        + "ft  " + "THR: " + str(thr))
+        + "ft  " + "THR: " + str(THR))
     print(f'\r{pct}', end='')
     time.sleep(step)
     file_actions.writefile(pct, 'C:/PyDev/Missile/log/blackbox')
@@ -198,7 +188,7 @@ dps = missilePosition / missileTarget * 2
 print(missilePosition, missileTarget, math.sqrt(dps))
 
 dataClear: str = input('Clear Data? (Y/N)')
-if dataClear == 'y' or dataClear == 'Y':
+if dataClear == 'y' or 'Y':
     dataInjector.clearDIR()
     dataInjector.clearCORR()
 else:

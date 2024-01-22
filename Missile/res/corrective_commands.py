@@ -4,14 +4,12 @@ class Command():
     """Corrective Commands"""
 
     def command(self, cmd: object = str) -> object:
-     """
+        """
 
-     :param cmd:
-     :return:
-     """
-     return str(cmd)
-     pass
-
+        :param cmd:
+        :return:
+        """
+        return str(cmd)
     def goToPos(self, cpos_x: object, cpos_y: object, cpos_z: object, pitch: object, yaw: object, roll: object, pos_x: object, pos_y: object, pos_z: object) -> object:
         """
 
@@ -26,26 +24,33 @@ class Command():
         :param pos_y:
         :param pos_z:
         """
-        pass
 
-    def goToTHR_UPDN(self, Tc: object, Tt: object, Tcur: object) -> object:
-          """
 
-          :rtype: object
-          """
-          Tc = Tc + Tt - Tc
-          return Tc
-    pass
-
-    def __RTG_KT_CO_VT_DP__(self, vt: object, vr: object, ac: object, ) -> object:
+    def goToTHR_UPDN(self, t_c: object, t_t: object, t_cur: object) -> object:
         """
 
         :rtype: object
-        :param vt:
-        :param vr:
-        :param ac:
         """
-        pass
+        t_c = t_c + (t_t - t_c) - t_cur
+        return t_c,
+
+
+    def __RTG_KT_CO_VT_DP__(self, v_t: object, v_r: object, a_c: object, ) -> object:
+        """
+
+        :rtype: object
+        :param v_t:
+        :param v_r:
+        :param a_c:
+        """
 
 class Action():
-    pass
+    """Control Actions"""
+    def pitch(self):
+        """Pitch Control"""
+
+    def roll(self):
+        """Roll Control"""
+
+    def yaw(self):
+        """Yaw Control"""

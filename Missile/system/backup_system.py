@@ -1,15 +1,15 @@
 """backup_system.py"""
 import Missile_Guidance_System as MGS
-version = MGS.version
-revision = MGS.revision
-name = MGS.name
-author = MGS.author
-copyrightYear = MGS.copyright
-mode = 'write'
+VERSION = MGS.VERSION
+REVISION = MGS.REVISION
+NAME = MGS.NAME
+AUTHOR = MGS.AUTHOR
+COPYRIGHTYEAR = MGS.COPYRIGHT
+MODE = 'write'
 
-if mode == 'write':
-    filename = ("Missile/assets/back/" + name + "-" + revision + "-" + version + "--" + copyrightYear + "-" + author + ".bin")
-    f = open(filename, "x")
-    
-if mode == 'read':
+if MODE == 'write':
+    FILENAME = ("Missile/assets/back/" + NAME + "-" + REVISION + "-" + VERSION
+        + "--" + COPYRIGHTYEAR + "-" + AUTHOR + ".bin")
+    f = open(FILENAME, "x")
+if MODE == 'read':
     pass
