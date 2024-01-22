@@ -7,7 +7,7 @@ import platform
 import time
 from Missile.res import corrective_commands
 from Missile.res import file_actions
-from Missile.guidance import dataInjector
+from Missile.guidance import data_injector
 
 virt_alt: int = 1
 valueError: str = "Error. Impossible values."
@@ -107,7 +107,7 @@ info()
 
 print(course(524, 216, 158))
 
-THR: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), THR, 100, THR)
+THR: int = corrective_commands.Command.go_to_thr(corrective_commands.Command.command('SLF', 'cmd'), THR, 100, THR)
 # DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
 # noinspection SpellCheckingInspection
 
@@ -188,9 +188,9 @@ dps = missilePosition / missileTarget * 2
 print(missilePosition, missileTarget, math.sqrt(dps))
 
 dataClear: str = input('Clear Data? (Y/N)')
-if dataClear == 'y' or 'Y':
-    dataInjector.clearDIR()
-    dataInjector.clearCORR()
+if dataClear == 'Y':
+    data_injector.clear_dir()
+    data_injector.clear_corr()
 else:
     pass
 

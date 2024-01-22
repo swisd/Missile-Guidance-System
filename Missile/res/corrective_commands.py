@@ -10,7 +10,7 @@ class Command():
         :return:
         """
         return str(cmd)
-    def goToPos(self, cpos_x: object, cpos_y: object, cpos_z: object, pitch: object, yaw: object, roll: object, pos_x: object, pos_y: object, pos_z: object) -> object:
+    def go_to_pos(self, cpos_x: object, cpos_y: object, cpos_z: object, pitch: object, yaw: object, roll: object, pos_x: object, pos_y: object, pos_z: object) -> object:
         """
 
         :rtype: object
@@ -26,7 +26,7 @@ class Command():
         """
 
 
-    def goToTHR_UPDN(self, t_c: object, t_t: object, t_cur: object) -> object:
+    def go_to_thr(self, t_c: object, t_t: object, t_cur: object) -> object:
         """
 
         :rtype: object

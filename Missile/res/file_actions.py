@@ -7,10 +7,10 @@ def writefile(data: object, location: object) -> object:
     :param data: 
     :param location: 
     """
-    f = open(location, "a")
-    f.write(data)
-    f.write('')
-    f.close()
+    _f = open(location, "a")
+    _f.write(data)
+    _f.write('')
+    _f.close()
 
 def writeFileNoAppend(data: object, location: object) -> object:
     """
@@ -19,7 +19,7 @@ def writeFileNoAppend(data: object, location: object) -> object:
     :param data:
     :param location:
     """
-    f = open(location, "w")
-    f.write(data)
-    f.write('')
-    f.close()
+    _f = open(location, "w")
+    _f.write(data)
+    _f.write('')
+    _f.close()
