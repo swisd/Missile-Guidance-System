@@ -29,9 +29,9 @@ class Command:
         """
         t_cs = t_c + (t_t - t_c) - t_cur
         return t_cs
-    def __RTG_KT_CO_VT_DP__(self, v_t: object, v_r: object, a_c: object, ) -> object:
+    def __rtg_kt_co_vt_dp__(self, v_t: object, v_r: object, a_c: object, ) -> object:
         """
-
+        __RTG_KT_CO_VT_DP__
         :rtype: object
         :param v_t:
         :param v_r:
