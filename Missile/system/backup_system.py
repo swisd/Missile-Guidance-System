@@ -1,5 +1,5 @@
 """backup_system.py"""
-import Missile_Guidance_System as MGS
+import missile_guidance_system_main as MGS
 
 VERSION = MGS.VERSION
 REVISION = MGS.REVISION
