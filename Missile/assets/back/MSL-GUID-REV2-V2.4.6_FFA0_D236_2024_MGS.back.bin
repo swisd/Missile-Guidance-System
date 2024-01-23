@@ -1,0 +1,944 @@
+file = '/Missile/system/Missile_Guidance_System.py' data //"""Missile Guidance System"""
+# Missile Guidance System.py
+
+import math
+import os
+import platform
+import time
+from Missile.res import corrective_commands
+from Missile.res import file_actions
+from Missile.guidance import dataInjector
+
+virt_alt: int = 1
+valueError: str = "Error. Impossible values."
+
+"""
+For use in future developments.
+pitch = 0
+roll = 0
+yaw = 0
+"""
+
+alt: int = 0
+"""
+spd = 0"""
+thr = 0
+"""
+ws = [0, 0]
+atp = 14.7  # ASL
+eng_ves_a = 0
+eng_vec_b = 0
+"""
+position = int(input("Start POS: "))
+target = int(input("TGT POS: "))
+tgt_alt = int(input("TGT ALT: "))
+anti: str = str(input("AT/AS: "))
+step = float(input("TS: "))
+missile: str = str(input("Type: "))
+
+
+def stat():
+    """
+    Missile Setting Information
+    :rtype: object
+    """
+    arc = 'MSL_PROG'
+    curve = 'normal-UUFD'
+    method = 'High Top Drop'
+    path = [52, 85, 0, -65]
+    print()
+    print("Navigation:")
+    print("  ARC: " + arc)
+    print("  Curve: " + curve)
+    print("  Method: " + method)
+    print("  PATH: " + str(path))
+    print()
+
+
+def course(d_p: int, d_m: int, s_a: int) -> object:
+    """
+    Course-Specific Calculations
+    :return:
+    :rtype: int
+    :param d_p:
+    :param d_m:
+    :param s_a:
+    :return:
+    """
+    print()
+    return 'Course INT:', (d_p * 2 / (d_m * d_p)) / ((d_m ** 2) / s_a)
+
+
+def info():
+    """
+    Information about host device.
+    :rtype: object
+    """
+    print("System Data:")
+    print("  System:", platform.system())
+    print("  CPU:")
+    print("    CPU Cores:", os.cpu_count())
+    print("    CPU Type:", "11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00 GHz")
+    print("    Desc:", platform.processor())
+    print("    VT:", '~_VT')
+    print("    CPU Temp:", "N/A")
+    print("  GPU:")
+    print("    GPU Cores:", "N/A")
+    print("    GPU Type:", "Intel(R) Iris(R) Xe Graphics")
+    print("    VT:", '+_KT_co')
+    print("    GPU Temp:", "N/A")
+    print()
+
+
+# fDIR = str(os.getcwd()) + '/log/blackbox/CRS_DIR.iSr'
+
+virt_dist = target / 5
+vdb = virt_dist * 2
+vdc = virt_dist * 3
+vdd = virt_dist * 4
+stat()
+info()
+
+print(course(524, 216, 158))
+
+thr: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), thr, 100, thr)
+# DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
+# noinspection SpellCheckingInspection
+
+while position != target and alt != tgt_alt:
+    if target > position:
+        poscur: int = target - position
+    
+    elif target < position:
+        poscur: int = position - target
+    
+    if poscur == target:
+        position += 1
+        course: bool = False
+    
+    elif poscur < target:
+        course: bool = True
+        position += 1
+    
+    elif poscur > target:
+        course: bool = True
+        position -= 1
+    
+    if position < virt_dist:
+        alt += virt_dist * 0.08
+    
+    elif virt_dist < position < vdb:
+        alt += virt_dist * 0.16
+    
+    elif vdb < position < vdc:
+        alt += 0
+    
+    elif position > vdc:
+        alt -= virt_dist * 0.12
+    
+    #Throttle Control
+    if (position + 300) <= target:
+        thr = 0
+    else:
+        pass
+    
+    pct: str = str(
+        "CPOS: " + str(position) + "  ID: " + str(poscur) + "  TGT: "
+        + str(target) + "  CRS: " + str(course) + "  ALT: "
+        + str(round(alt)) + "ft" + "  TGT ALT: " + str(tgt_alt)
+        + "ft  " + "THR: " + str(thr))
+    print(f'\r{pct}', end='')
+    time.sleep(step)
+    file_actions.writefile(pct, 'C:/PyDev/Missile/log/blackbox')
+
+
+# Hit confirmation output / define
+
+def error():
+    """
+    Value Error
+    """
+    print(valueError)
+
+
+def detonate():
+    """
+    Detonation Command
+    """
+    explosive_mass = 300
+    shrapnel = False
+    if anti == 'yes':
+        anti_tank: bool = True
+    else:
+        anti_tank = False
+    warhead = "HEAT"
+    print("Detonated. Explosive Mass of", explosive_mass, "Lbs Hit target successfully with", warhead,
+          "warhead. ", "Shrapnel:",
+          shrapnel, "  AT/AS:", anti_tank, "  Missile:", missile, "  Altitude:", alt)
+
+
+missilePosition = position
+missileTarget = target
+
+if missilePosition != missileTarget:
+    error()
+
+if position == target:
+    print(position, poscur, target, "Hit")
+    time.sleep(0.1)
+    detonate()
+dps = missilePosition / missileTarget * 2
+
+print(missilePosition, missileTarget, math.sqrt(dps))
+
+dataClear: str = input('Clear Data? (Y/N)')
+if dataClear == 'y' or dataClear == 'Y':
+    dataInjector.clearDIR()
+    dataInjector.clearCORR()
+else:
+    pass
+
+print('Missile Guidance System MSL-GUID-REV2-V2.4.6 ©2024 swisd')
+file = '/Missile/res/corrective_commands.py' data //#corrective_commands.py
+"""Corrective Guidance Commands"""
+class Command():
+    """Corrective Commands"""
+
+    def command(self, cmd: object = str) -> object:
+     """
+
+     :param cmd:
+     :return:
+     """
+     return str(cmd)
+     pass
+
+    def goToPos(self, cpos_x: object, cpos_y: object, cpos_z: object, pitch: object, yaw: object, roll: object, pos_x: object, pos_y: object, pos_z: object) -> object:
+        """
+
+        :rtype: object
+        :param cpos_x:
+        :param cpos_y:
+        :param cpos_z:
+        :param pitch:
+        :param yaw:
+        :param roll:
+        :param pos_x:
+        :param pos_y:
+        :param pos_z:
+        """
+        pass
+
+    def goToTHR_UPDN(self, Tc: object, Tt: object, Tcur: object) -> object:
+          """
+
+          :rtype: object
+          """
+          Tc = Tc + Tt - Tc
+          return Tc
+    pass
+
+    def __RTG_KT_CO_VT_DP__(self, vt: object, vr: object, ac: object, ) -> object:
+        """
+
+        :rtype: object
+        :param vt:
+        :param vr:
+        :param ac:
+        """
+        pass
+
+class Action():
+    pass
+file = '/Missile/res/define.py' data//"""Definitions"""
+#General Constants
+
+"""
+pitch = 0
+roll = 0
+yaw = 0
+alt = 0
+spd = 0
+thr = 0
+ws = [0,0]
+atp = 14.7 #ASL
+position = 0
+target = 0
+tgt_alt = 0
+anti = ''
+step = 0.25
+missile = ''
+wp_a = 0
+wp_a_alt = 0
+wp_b = 0
+wp_b_alt = 0
+wp_c = 0
+wp_c_alt = 0
+wp_d = 0
+wp_d_alt = 0
+"""
+file = '/Missile/res/file_actions.py' data//#file_actions.py
+
+
+def writefile(data: object, location: object) -> object:
+    """
+
+    :rtype: object
+    :param data: 
+    :param location: 
+    """
+    f = open(location, "a")
+    f.write(data)
+    f.write('')
+    f.close()
+
+def writeFileNoAppend(data: object, location: object) -> object:
+    """
+
+    :rtype: object
+    :param data:
+    :param location:
+    """
+    f = open(location, "w")
+    f.write(data)
+    f.write('')
+    f.close()
+file = '/Missile/res/MSL_DEF.py' data//""" """
+"""
+class AGMX354D():
+    @property
+    def center(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 0
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def noseCone(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 0
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def body(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 10
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def engine(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 20
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def wingFin1(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 5
+        loc_z: int = 12
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def wingFin2(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 5
+        loc_z: int = 12
+        rot: int = 120
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def wingFin3(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 5
+        loc_z: int = 12
+        rot: int = 240
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def tailFin1(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 26
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def tailFin2(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 26
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def tailFin3(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 26
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+
+    @property
+    def avionics(call: str) -> object:
+        loc_x: int = 0
+        loc_y: int = 0
+        loc_z: int = 3
+        rot: int = 0
+        if call == loc_x:
+            return loc_x
+        elif call == loc_y:
+            return loc_y
+        elif call == loc_z:
+            return loc_z
+"""
+file = '/Missile/assets/GTK-GO/dps-a.lps12a-g0 data//
+file = '/Missile/assets/models/AGMX_354_D.msl' data//missile{
+    ref center{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    nose noseCone{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    part body{
+        locX = 0
+        locY = 0
+        locZ = 10
+        rot = 0
+        diam = 10
+	}
+    engine mainEngine{
+        locX = 0
+        locY = 0
+        locZ = 20
+        rot = 0
+        ord{
+         chamberVolumeSQcm = 1200
+         IGNTemp = 1450
+         Ispeed = 12.4
+         type = 'Bipropellant'
+        }
+	}
+    fin wingFin1{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 0
+        profile = LP_Delta
+        l = 22
+        w = 10
+        decal{
+            type = 'Stripe'
+            color = '00000f'
+        }
+    }
+    fin wingFin2{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 120
+        profile = LP_Delta
+        l = 22
+        w = 10
+	}
+    fin wingFin3{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 240
+        profile = LP_Delta
+        l = 22
+        w = 10
+	}
+    fin tailFin1{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV1'
+        }
+
+	}
+    fin tailFin2{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV2'
+        }
+	}
+    fin tailFin3{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV3'
+        }
+	}
+    control avionics{
+        locX = 0
+        locY = 0
+        locZ = 3
+        rot = 0
+        type = 'MCU_AVRX_DSTL'
+        rs{
+            CPU = 'AVRX 240 AVION'
+            heatsinkCPU = True
+            PSUType = 'NTD 5-15V'
+        }
+
+        ctrl{
+            outputsCNTR{
+                SRV1 = OUT1
+                SRV2 = OUT2
+                SRV3 = OUT3
+            }
+        }
+
+        data{
+            limits = [20, 20]
+            course = ProgCRSInput
+
+        }
+        gyro{
+            type = 'LRG'
+        }
+	}
+}
+file = '/Missile/assets/models/ICBCM-ATCS-152A-D.msl' data//missile{
+    ref center{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    nose noseCone{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    part body{
+        locX = 0
+        locY = 0
+        locZ = 10
+        rot = 0
+        diam = 10
+	}
+    engine mainEngine{
+        locX = 0
+        locY = 0
+        locZ = 20
+        rot = 0
+        ord{
+         chamberVolumeSQcm = 1200
+         IGNTemp = 1450
+         Ispeed = 12.4
+         type = 'Bipropellant'
+        }
+	}
+    fin wingFin1{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 0
+        profile = LP_Delta
+        l = 15
+        w = 30
+        decal{
+            type = 'Stripe'
+            color = '00000f'
+        }
+    }
+    fin wingFin2{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 180
+        profile = LP_Delta
+        l = 15
+        w = 30
+	}
+    fin tailFin1{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV1'
+        }
+
+	}
+    fin tailFin2{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV2'
+        }
+	}
+    fin tailFin3{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV3'
+        }
+	}
+    control avionics{
+        locX = 0
+        locY = 0
+        locZ = 3
+        rot = 0
+        type = 'MCU_AVRX_DSTL'
+        rs{
+            CPU = 'AVRX 240 AVION'
+            heatsinkCPU = True
+            PSUType = 'NTD 5-15V'
+        }
+
+        ctrl{
+            outputsCNTR{
+                SRV1 = OUT1
+                SRV2 = OUT2
+                SRV3 = OUT3
+            }
+        }
+
+        data{
+            limits = [20, 20]
+            course = ProgCRSInput
+
+        }
+        gyro{
+            type = 'LRG'
+        }
+	}
+}file = '/Missile/guidance/dataInjector.py' data//'Data Injector Program'
+
+from Missile.res import file_actions
+
+
+def injectData(data, location, position):
+    file_actions.writefile(str(data), location)
+
+
+def clearCORR():
+    file_actions.writeFileNoAppend('*dsp//CRS_CORR.iSr,  CMD/DATA?rS CMD -LOG->',
+								   'C:/PyDev/Missile/log/blackbox/CRS_CORR.iSr')
+
+
+def clearDIR():
+    file_actions.writeFileNoAppend('*dsp//CRS_DIR.iSr,  CMD/DATA?rS CMD -LOG->',
+								   'C:/PyDev/Missile/log/blackbox/CRS_DIR.iSr')
+file = '/Missile/guidance/structure.bin' data// key = 6V9 1W1 2IO 53 _ NT WIN 11 A0  ? 
+ @    ^file = '/Missile/log/blackbos/CRS_CORR.iSr' data//*dsp//CRS_CORR.iSr,  CMD/DATA?rS CMD -LOG->file = '/Missile/log/blackbox/CRS_DIR.iSr' data//*dsp//CRS_CORR.iSr,  CMD/DATA?rS CMD -LOG->CPOS: 1  ID: 1200  TGT: 1200  CRS: False  ALT: 19ft  TGT ALT: 120ft  THR: 100CPOS: 2  ID: 1199  TGT: 1200  CRS: True  ALT: 38ft  TGT ALT: 120ft  THR: 100CPOS: 3  ID: 1198  TGT: 1200  CRS: True  ALT: 58ft  TGT ALT: 120ft  THR: 100CPOS: 4  ID: 1197  TGT: 1200  CRS: True  ALT: 77ft  TGT ALT: 120ft  THR: 100CPOS: 5  ID: 1196  TGT: 1200  CRS: True  ALT: 96ft  TGT ALT: 120ft  THR: 100CPOS: 6  ID: 1195  TGT: 1200  CRS: True  ALT: 115ft  TGT ALT: 120ft  THR: 100CPOS: 7  ID: 1194  TGT: 1200  CRS: True  ALT: 134ft  TGT ALT: 120ft  THR: 100CPOS: 8  ID: 1193  TGT: 1200  CRS: True  ALT: 154ft  TGT ALT: 120ft  THR: 100CPOS: 9  ID: 1192  TGT: 1200  CRS: True  ALT: 173ft  TGT ALT: 120ft  THR: 100CPOS: 10  ID: 1191  TGT: 1200  CRS: True  ALT: 192ft  TGT ALT: 120ft  THR: 100CPOS: 11  ID: 1190  TGT: 1200  CRS: True  ALT: 211ft  TGT ALT: 120ft  THR: 100CPOS: 12  ID: 1189  TGT: 1200  CRS: True  ALT: 230ft  TGT ALT: 120ft  THR: 100CPOS: 13  ID: 1188  TGT: 1200  CRS: True  ALT: 250ft  TGT ALT: 120ft  THR: 100CPOS: 14  ID: 1187  TGT: 1200  CRS: True  ALT: 269ft  TGT ALT: 120ft  THR: 100CPOS: 15  ID: 1186  TGT: 1200  CRS: True  ALT: 288ft  TGT ALT: 120ft  THR: 100CPOS: 16  ID: 1185  TGT: 1200  CRS: True  ALT: 307ft  TGT ALT: 120ft  THR: 100CPOS: 17  ID: 1184  TGT: 1200  CRS: True  ALT: 326ft  TGT ALT: 120ft  THR: 100CPOS: 18  ID: 1183  TGT: 1200  CRS: True  ALT: 346ft  TGT ALT: 120ft  THR: 100CPOS: 19  ID: 1182  TGT: 1200  CRS: True  ALT: 365ft  TGT ALT: 120ft  THR: 100CPOS: 20  ID: 1181  TGT: 1200  CRS: True  ALT: 384ft  TGT ALT: 120ft  THR: 100CPOS: 21  ID: 1180  TGT: 1200  CRS: True  ALT: 403ft  TGT ALT: 120ft  THR: 100CPOS: 22  ID: 1179  TGT: 1200  CRS: True  ALT: 422ft  TGT ALT: 120ft  THR: 100CPOS: 23  ID: 1178  TGT: 1200  CRS: True  ALT: 442ft  TGT ALT: 120ft  THR: 100CPOS: 24  ID: 1177  TGT: 1200  CRS: True  ALT: 461ft  TGT ALT: 120ft  THR: 100CPOS: 25  ID: 1176  TGT: 1200  CRS: True  ALT: 480ft  TGT ALT: 120ft  THR: 100CPOS: 26  ID: 1175  TGT: 1200  CRS: True  ALT: 499ft  TGT ALT: 120ft  THR: 100CPOS: 27  ID: 1174  TGT: 1200  CRS: True  ALT: 518ft  TGT ALT: 120ft  THR: 100CPOS: 28  ID: 1173  TGT: 1200  CRS: True  ALT: 538ft  TGT ALT: 120ft  THR: 100CPOS: 29  ID: 1172  TGT: 1200  CRS: True  ALT: 557ft  TGT ALT: 120ft  THR: 100CPOS: 30  ID: 1171  TGT: 1200  CRS: True  ALT: 576ft  TGT ALT: 120ft  THR: 100CPOS: 31  ID: 1170  TGT: 1200  CRS: True  ALT: 595ft  TGT ALT: 120ft  THR: 100CPOS: 32  ID: 1169  TGT: 1200  CRS: True  ALT: 614ft  TGT ALT: 120ft  THR: 100CPOS: 33  ID: 1168  TGT: 1200  CRS: True  ALT: 634ft  TGT ALT: 120ft  THR: 100CPOS: 34  ID: 1167  TGT: 1200  CRS: True  ALT: 653ft  TGT ALT: 120ft  THR: 100CPOS: 35  ID: 1166  TGT: 1200  CRS: True  ALT: 672ft  TGT ALT: 120ft  THR: 100CPOS: 36  ID: 1165  TGT: 1200  CRS: True  ALT: 691ft  TGT ALT: 120ft  THR: 100CPOS: 37  ID: 1164  TGT: 1200  CRS: True  ALT: 710ft  TGT ALT: 120ft  THR: 100CPOS: 38  ID: 1163  TGT: 1200  CRS: True  ALT: 730ft  TGT ALT: 120ft  THR: 100CPOS: 39  ID: 1162  TGT: 1200  CRS: True  ALT: 749ft  TGT ALT: 120ft  THR: 100CPOS: 40  ID: 1161  TGT: 1200  CRS: True  ALT: 768ft  TGT ALT: 120ft  THR: 100CPOS: 41  ID: 1160  TGT: 1200  CRS: True  ALT: 787ft  TGT ALT: 120ft  THR: 100CPOS: 42  ID: 1159  TGT: 1200  CRS: True  ALT: 806ft  TGT ALT: 120ft  THR: 100CPOS: 43  ID: 1158  TGT: 1200  CRS: True  ALT: 826ft  TGT ALT: 120ft  THR: 100CPOS: 44  ID: 1157  TGT: 1200  CRS: True  ALT: 845ft  TGT ALT: 120ft  THR: 100CPOS: 45  ID: 1156  TGT: 1200  CRS: True  ALT: 864ft  TGT ALT: 120ft  THR: 100CPOS: 46  ID: 1155  TGT: 1200  CRS: True  ALT: 883ft  TGT ALT: 120ft  THR: 100CPOS: 47  ID: 1154  TGT: 1200  CRS: True  ALT: 902ft  TGT ALT: 120ft  THR: 100CPOS: 48  ID: 1153  TGT: 1200  CRS: True  ALT: 922ft  TGT ALT: 120ft  THR: 100CPOS: 49  ID: 1152  TGT: 1200  CRS: True  ALT: 941ft  TGT ALT: 120ft  THR: 100CPOS: 50  ID: 1151  TGT: 1200  CRS: True  ALT: 960ft  TGT ALT: 120ft  THR: 100CPOS: 51  ID: 1150  TGT: 1200  CRS: True  ALT: 979ft  TGT ALT: 120ft  THR: 100CPOS: 52  ID: 1149  TGT: 1200  CRS: True  ALT: 998ft  TGT ALT: 120ft  THR: 100CPOS: 53  ID: 1148  TGT: 1200  CRS: True  ALT: 1018ft  TGT ALT: 120ft  THR: 100CPOS: 54  ID: 1147  TGT: 1200  CRS: True  ALT: 1037ft  TGT ALT: 120ft  THR: 100CPOS: 55  ID: 1146  TGT: 1200  CRS: True  ALT: 1056ft  TGT ALT: 120ft  THR: 100CPOS: 56  ID: 1145  TGT: 1200  CRS: True  ALT: 1075ft  TGT ALT: 120ft  THR: 100CPOS: 57  ID: 1144  TGT: 1200  CRS: True  ALT: 1094ft  TGT ALT: 120ft  THR: 100CPOS: 58  ID: 1143  TGT: 1200  CRS: True  ALT: 1114ft  TGT ALT: 120ft  THR: 100CPOS: 59  ID: 1142  TGT: 1200  CRS: True  ALT: 1133ft  TGT ALT: 120ft  THR: 100CPOS: 60  ID: 1141  TGT: 1200  CRS: True  ALT: 1152ft  TGT ALT: 120ft  THR: 100CPOS: 61  ID: 1140  TGT: 1200  CRS: True  ALT: 1171ft  TGT ALT: 120ft  THR: 100CPOS: 62  ID: 1139  TGT: 1200  CRS: True  ALT: 1190ft  TGT ALT: 120ft  THR: 100CPOS: 63  ID: 1138  TGT: 1200  CRS: True  ALT: 1210ft  TGT ALT: 120ft  THR: 100CPOS: 64  ID: 1137  TGT: 1200  CRS: True  ALT: 1229ft  TGT ALT: 120ft  THR: 100CPOS: 65  ID: 1136  TGT: 1200  CRS: True  ALT: 1248ft  TGT ALT: 120ft  THR: 100file = '/Missile/system/file.py' data//"""file.py"""file = '/Missile/system/MGS_GUI.pyrs' data//# Missile Guidance System.py
+
+
+from LNmain import LNRmain as LNR
+
+# Future GUI Development
+
+import math
+import os
+import platform
+import time
+from Missile.res import corrective_commands
+from Missile.res import file_actions
+from Missile.guidance import dataInjector
+
+virt_alt: int = 1
+valueError: str = "Error. Impossible values."
+
+"""
+For use in future developments.
+pitch = 0
+roll = 0
+yaw = 0
+"""
+
+alt: int = 0
+"""
+spd = 0"""
+thr = 0
+"""
+ws = [0, 0]
+atp = 14.7  # ASL
+eng_ves_a = 0
+eng_vec_b = 0
+"""
+position = int(input("Start POS: "))
+target = int(input("TGT POS: "))
+tgt_alt = int(input("TGT ALT: "))
+anti: str = str(input("AT/AS: "))
+step = float(input("TS: "))
+missile: str = str(input("Type: "))
+
+
+def stat():
+    """
+    Missile Setting Information
+    :rtype: object
+    """
+    arc = 'MSL_PROG'
+    curve = 'normal-UUFD'
+    method = 'High Top Drop'
+    path = [52, 85, 0, -65]
+    print()
+    print("Navigation:")
+    print("  ARC: " + arc)
+    print("  Curve: " + curve)
+    print("  Method: " + method)
+    print("  PATH: " + str(path))
+    print()
+
+
+def course(d_p: int, d_m: int, s_a: int) -> object:
+    """
+    Course-Specific Calculations
+    :return:
+    :rtype: int
+    :param d_p:
+    :param d_m:
+    :param s_a:
+    :return:
+    """
+    print()
+    return 'Course INT:', (d_p * 2 / (d_m * d_p)) / ((d_m ** 2) / s_a)
+
+
+def info():
+    """
+    Information about host device.
+    :rtype: object
+    """
+    print("System Data:")
+    print("  System:", platform.system())
+    print("  CPU:")
+    print("    CPU Cores:", os.cpu_count())
+    print("    CPU Type:", "11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00 GHz")
+    print("    Desc:", platform.processor())
+    print("    VT:", '~_VT')
+    print("    CPU Temp:", "N/A")
+    print("  GPU:")
+    print("    GPU Cores:", "N/A")
+    print("    GPU Type:", "Intel(R) Iris(R) Xe Graphics")
+    print("    VT:", '+_KT_co')
+    print("    GPU Temp:", "N/A")
+    print()
+
+
+# fDIR = str(os.getcwd()) + '/log/blackbox/CRS_DIR.iSr'
+
+virt_dist = target / 5
+vdb = virt_dist * 2
+vdc = virt_dist * 3
+vdd = virt_dist * 4
+stat()
+info()
+
+print(course(524, 216, 158))
+
+thr: int = corrective_commands.Command.goToTHR_UPDN(corrective_commands.Command.command('SLF', 'cmd'), thr, 100, thr)
+# DPS, Position, Altitude, Thrust, and P/Y/R Corrective Command Calculations
+# noinspection SpellCheckingInspection
+
+while position != target and alt != tgt_alt:
+    if target > position:
+        poscur: int = target - position
+
+    elif target < position:
+        poscur: int = position - target
+
+    if poscur == target:
+        position += 1
+        course: bool = False
+
+    elif poscur < target:
+        course: bool = True
+        position += 1
+
+    elif poscur > target:
+        course: bool = True
+        position -= 1
+
+    if position < virt_dist:
+        alt += virt_dist * 0.08
+
+    elif virt_dist < position < vdb:
+        alt += virt_dist * 0.16
+
+    elif vdb < position < vdc:
+        alt += 0
+
+    elif position > vdc:
+        alt -= virt_dist * 0.12
+
+    #Throttle Control
+    if (position + 300) <= target:
+        thr = 0
+    else:
+        pass
+
+    pct: str = str(
+        "CPOS: " + str(position) + "  ID: " + str(poscur) + "  TGT: "
+        + str(target) + "  CRS: " + str(course) + "  ALT: "
+        + str(round(alt)) + "ft" + "  TGT ALT: " + str(tgt_alt)
+        + "ft  " + "THR: " + str(thr))
+    print(f'\r{pct}', end='')
+    time.sleep(step)
+    file_actions.writefile(pct, 'C:/PyDev/Missile/log/blackbox')
+
+
+# Hit confirmation output / define
+
+def error():
+    """
+    Value Error
+    """
+    print(valueError)
+
+
+def detonate():
+    """
+    Detonation Command
+    """
+    explosive_mass = 300
+    shrapnel = False
+    if anti == 'yes':
+        anti_tank: bool = True
+    else:
+        anti_tank = False
+    warhead = "HEAT"
+    print("Detonated. Explosive Mass of", explosive_mass, "Lbs Hit target successfully with", warhead,
+          "warhead. ", "Shrapnel:",
+          shrapnel, "  AT/AS:", anti_tank, "  Missile:", missile, "  Altitude:", alt)
+
+
+missilePosition = position
+missileTarget = target
+
+if missilePosition != missileTarget:
+    error()
+
+if position == target:
+    print(position, poscur, target, "Hit")
+    time.sleep(0.1)
+    detonate()
+dps = missilePosition / missileTarget * 2
+
+print(missilePosition, missileTarget, math.sqrt(dps))
+
+dataClear: str = input('Clear Data? (Y/N)')
+if dataClear == 'y' or dataClear == 'Y':
+    dataInjector.clearDIR()
+    dataInjector.clearCORR()
+else:
+    pass
+
+print('Missile Guidance System MSL-GUID-REV2-V2.4.6 ©2023 swisd')
+
+  $filetree:
+main	/Missile:
+dir		/assets:
+sub			/back:
+sub			/GTK-GO:
+sub			/models:
+dir		/guidance:
+dir		/log:
+sub			/blackbox:
+dir		/res:
+dir		/system:
+    currentfile = '/Missile/assets/back/MSL-GUID-REV2-V2.4.6_FFA0_D236_2024_MGS.back.bin'  
