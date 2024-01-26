@@ -1,0 +1,10 @@
+"""Controller"""
+with System
+
+define limit (int: angle)
+{
+    if(abs(angle) > 160)
+        return True
+    else
+        return False
+}

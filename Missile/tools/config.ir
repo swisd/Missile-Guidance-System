@@ -1,0 +1,8 @@
+nt base
+ns base
+compile r:
+(
+    minVal = 0x0
+    maxVal = 0xf
+    confVal = 0b0
+)
