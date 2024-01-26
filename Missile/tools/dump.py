@@ -8,8 +8,8 @@ dt_object = now.strftime("%d%m%Y_%H%M%S")
 
 directory = os.getcwd()
 directory = directory.removesuffix('tools')
-file_label: str = "nf_dump-" + str(dt_object) +  "(V2.7.0)" + '.bin'
-path: str = str(os.getcwd()) + '/dumps/' + file_label
+file_label: str = "nf_dump-" + str(dt_object) +  "(V2.7.1)" + '.bin'
+path: str = str(directory) + '/dumps/' + file_label
 
 
 size: int = 0

@@ -32,7 +32,7 @@ eng_vec_b = 0
 """
 # Inputs
 print('--------------------------------------')
-print('   Missile Guidance System V2.4.8.1   ')
+print('   Missile Guidance System V2.7.1     ')
 print(' [DSM 10] [PY 3.10] [WIN11] [DTR-45D] ')
 print('--------------------------------------')
 position = int(input("Start POS: "))
@@ -44,7 +44,7 @@ print(missile_list)
 missile: str = str(input("Type: "))
 print('--------------------------------------')
 
-VERSION = '2.4.6'
+VERSION = '2.7.1'
 REVISION = 'MSL-GUID-REV2'
 NAME = 'Missile Guidance System'
 AUTHOR = 'swisd'
