@@ -8,7 +8,7 @@ dt_object = now.strftime("%d%m%Y%H%M%S%f%j")
 
 directory = os.getcwd()
 directory = directory.removesuffix('tools')
-file_label: str = "MSL-GUID-REV2-V2.4.9.4-" + dt_object + '.bin'
+file_label: str = "MSL-GUID-REV2-V2.7.0-" + dt_object + '.bin'
 path: str = str(os.getcwd()) + '/assets/back/' + file_label
 screen = False
 
