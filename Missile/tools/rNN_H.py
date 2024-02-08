@@ -110,7 +110,7 @@ for filename in os.listdir(modelsDIR):
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/missiles/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
 
-        with open('disklist', "w+") as ns:
+        with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
             ns.write(bins + "\n")
             ns.write(comp + "\n")
@@ -120,7 +120,7 @@ for filename in os.listdir(modelsDIR):
 
         print('[1] FILE:', f)
         size += os.path.getsize(f)
-        out('disklist', nlist, mode='bin-flex')
+        out('disklist.e.idl', nlist, mode='bin-flex')
 
     time.sleep(0.05)
 print('Compressing...')
@@ -157,7 +157,7 @@ for filename in os.listdir(targetsDIR):
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/targets/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
 
-        with open('disklist', "w+") as ns:
+        with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
             ns.write(bins + "\n")
             ns.write(comp + "\n")
@@ -167,7 +167,7 @@ for filename in os.listdir(targetsDIR):
 
         print('[1] FILE:', f)
         size += os.path.getsize(f)
-        out('disklist', nlist, mode='bin-flex')
+        out('disklist.e.idl', nlist, mode='bin-flex')
 
     time.sleep(0.05)
 print('Compressing...')
@@ -204,7 +204,7 @@ for filename in os.listdir(launchersDIR):
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/launchers/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
 
-        with open('disklist', "w+") as ns:
+        with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
             ns.write(bins + "\n")
             ns.write(comp + "\n")
@@ -214,7 +214,7 @@ for filename in os.listdir(launchersDIR):
 
         print('[1] FILE:', f)
         size += os.path.getsize(f)
-        out('disklist', nlist, mode='bin-flex')
+        out('disklist.e.idl', nlist, mode='bin-flex')
 
     time.sleep(0.05)
 print('Compressing...')
