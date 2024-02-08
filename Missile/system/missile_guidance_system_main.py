@@ -12,7 +12,8 @@ virt_alt: int = 1
 valueError: str = "Error. Impossible values."
 CONSTANTS = define.CONSTANTS
 missile_list = ['DTR-45D', 'AGMX 354-H', 'ICBCM-ATCS 152A/C']
-
+directory = os.getcwd()
+directory = directory.removesuffix('system')
 """
 For use in future developments.
 pitch = 0
@@ -211,4 +212,4 @@ if dataClear == 'Y':
 else:
     pass
 
-print('Missile Guidance System MSL-GUID-REV2-V2.4.6 ©2024 swisd')
+print('Missile Guidance System MSL-GUID-REV2-V2.7.1')

@@ -1,0 +1,40 @@
+Model Structure
+
+General Variables
+    name                  Model name
+    units_mass            Units for Mass
+    units_measure         Units for Measurement
+    warhead               Warhead Type
+    warhead_mass_lb       Warhead Mass
+    Wingspan              Wingspan
+    Diameter              Diameter
+    Length                Length
+    Range                 Range
+
+Construction Model:
+
+missile{}                                Missile Data
+    cone{}                               Nose Cone
+    box{}                                Fin Box
+    fin{}                                Fin (CONT/NCONT)
+        cont{}                           Fin Control
+        decal{}                          Decal
+    body{}                               Fuselage
+        shape{}                          Shape of Fuselage
+    point{}                              Point of Mesh
+    mesh{}                               Point Mesh
+    cubicForm{}                          Cube with relocatable vertices
+    sphereForm{}                         Sphere with relocatable vertices
+    cubeMesh{}                           Cubic Mesh
+    sphereMesh{}                         Spherical Mesh
+    engine{}                             Engine
+        ord{}                            Engine Properties
+    ref{}                                Reference point
+    control{}                            Control Equipment
+        rs{}                             Control Equipment Properties
+        ctrl{}                           Control Sources/Outputs
+            outputsCNTR{}                Fin servo outputs
+        data{}                           Control Data
+        gyro{}                           Gyroscope
+    group{}                              Object Group
+    structure{}                          Structural Object Group

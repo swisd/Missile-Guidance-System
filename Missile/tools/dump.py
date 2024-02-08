@@ -2,13 +2,14 @@
 import os
 import time
 from datetime import datetime
+import Missile
 
 now = datetime.now()
 dt_object = now.strftime("%d%m%Y_%H%M%S")
 
 directory = os.getcwd()
 directory = directory.removesuffix('tools')
-file_label: str = "nf_dump-" + str(dt_object) +  "(V2.7.1)" + '.bin'
+file_label: str = "nf_dump-" + str(dt_object) +  "(V" + Missile.__version__ + ")" + '.bin'
 path: str = str(directory) + '/dumps/' + file_label
 
 
@@ -68,7 +69,47 @@ for filename in os.listdir(directory):
                                 size += os.path.getsize(f)
                                 dump(f, path)
                             if os.path.isdir(r):
-                                print('[E] DIRECTORY:', s)
+                                for filename in os.listdir(r):
+                                    f = os.path.join(directory, filename)
+                                    e = os.path.join(directory, filename)
+                                    # checking if it is a file
+                                    if os.path.isfile(f):
+                                        print('[5] FILE:', f)
+                                        size += os.path.getsize(f)
+                                        dump(f, path)
+                                    if os.path.isdir(e):
+                                        for filename in os.listdir(e):
+                                            f = os.path.join(e, filename)
+                                            q = os.path.join(e, filename)
+                                            # checking if it is a file
+                                            if os.path.isfile(f):
+                                                print('[6] FILE:', f)
+                                                size += os.path.getsize(f)
+                                                dump(f, path)
+                                            if os.path.isdir(q):
+                                                for filename in os.listdir(q):
+                                                    f = os.path.join(q, filename)
+                                                    t = os.path.join(q, filename)
+                                                    # checking if it is a file
+                                                    if os.path.isfile(f):
+                                                        print('[7] FILE:', f)
+                                                        size += os.path.getsize(f)
+                                                        dump(f, path)
+                                                    if os.path.isdir(t):
+                                                        for filename in os.listdir(t):
+                                                            f = os.path.join(t, filename)
+                                                            r = os.path.join(t, filename)
+                                                            # checking if it is a file
+                                                            if os.path.isfile(f):
+                                                                print('[8] FILE:', f)
+                                                                size += os.path.getsize(f)
+                                                                dump(f, path)
+                                                            if os.path.isdir(r):
+                                                                print('[E] DIRECTORY:', t)
+                                                            time.sleep(0.1)
+                                                    time.sleep(0.1)
+                                            time.sleep(0.1)
+                                    time.sleep(0.1)
                             time.sleep(0.1)
                     time.sleep(0.1)
             time.sleep(0.1)

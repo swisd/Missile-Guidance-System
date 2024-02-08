@@ -1,0 +1,60 @@
+launcher{
+    structure main{
+        cubicForm base{
+            locX = 0
+            locY = 0
+            locZ = 0
+            rot = 0
+            inverse = false
+            points{
+                point point1{
+                    locX = 10
+                    locY = 10
+                    locZ = 10
+                }
+
+                point point2{
+                    locX = -10
+                    locY = 10
+                    locZ = 10
+                }
+
+                point point3{
+                    locX = 10
+                    locY = -10
+                    locZ = 10
+                }
+
+                point point4{
+                    locX = 10
+                    locY = 10
+                    locZ = -10
+                }
+
+                point point5{
+                    locX = -10
+                    locY = 10
+                    locZ = -10
+                }
+
+                point point6{
+                    locX = 10
+                    locY = -10
+                    locZ = -10
+                }
+
+                point point7{
+                    locX = -10
+                    locY = -10
+                    locZ = -10
+                }
+
+                point point8{
+                    locX = 10
+                    locY = 10
+                    locZ = -10
+                }
+            }
+        }
+    }
+}

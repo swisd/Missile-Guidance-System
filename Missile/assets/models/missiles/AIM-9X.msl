@@ -1,0 +1,19 @@
+$missile
+name = 'AIM-9X'
+units_mass = 'lb'
+units_measure = 'in_imperial'
+warhead = 'ABF'
+warhead_mass_lb = 20.8
+Wingspan = 11
+Diameter = 5
+Length = 119
+Range = 22
+Speed = 2.5
+
+missile{
+    ref center{
+        locX = 0
+        locY = 0
+        locZ = 0
+    }
+}

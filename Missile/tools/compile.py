@@ -8,7 +8,7 @@ directory = os.getcwd()
 directory = directory.removesuffix('tools')
 ITEMS = 0
 l1 = 0
-path: str = (directory + 'compiled/')
+path: str = (directory + '/compiled/')
 print("PATH:", path)
 now = datetime.now()
 dn_object = now.strftime("%j%z-%f")
@@ -38,24 +38,26 @@ def write_to(file, output):
     if (os.path.exists(output) == False):
         with open(output, "xb") as _w:
             _w.write(current_file)
+            _w.close()
     else:
         with open(output, "ab") as _w:
             _w.write(current_file)
+            _w.close()
+    _f.close()
 
-
-compress('nt', (directory + 'compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
-write_to('nt', (directory + 'compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
-write_to('config.ir',
-         (directory + 'compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
+compress(directory + '/tools/nt', (directory + '/compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
+write_to(directory + '/tools/nt', (directory + '/compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
+write_to(directory + '/tools/config.ir',
+         (directory + '/compiled/' + '0b0' + '/' + str(dt_object) + '/' + str(dn_object) + '/' + 'base.bin'))
 for i in range(16):
     now = datetime.now()
     dt_object = now.strftime("%d%m%Y%H%M%S%f%j%z")
     dn_object = now.strftime("%j%z-%f")
     name = '63342' + '_' + str(dt_object) + '.bin'
     label = hex(l1)
-    path: str = (directory + 'compiled/' + label + '/' + str(ITEMS) + '/' + str(dn_object) + '/' + name)
+    path: str = (directory + '/compiled/' + label + '/' + str(ITEMS) + '/' + str(dn_object) + '/' + name)
     full = path + "." + dt_object + ".comp.bin"
-    compress('nt', (directory + 'compiled/' + '0x' + '/' + str(dt_object) +
+    compress(directory + '/tools/nt', (directory + '/compiled/' + '0x' + '/' + str(dt_object) +
                     '/' + str(dn_object) + '/' + str(i) + '.bin'))
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -164,9 +166,9 @@ for i in range(16):
     dn_object = now.strftime("%j%z-%f")
     name = '63342' + '_' + str(dt_object) + '.bin'
     label = hex(l1)
-    path: str = (directory + 'compiled/' + label + '/' + str(ITEMS) + '/' + str(dn_object) + '/' + name)
+    path: str = (directory + '/compiled/' + label + '/' + str(ITEMS) + '/' + str(dn_object) + '/' + name)
     full = path + "." + dt_object + ".comp.bin"
-    compress('nt', (directory + 'compiled/' + '1x' + '/' + str(dt_object) +
+    compress(directory + '/tools/nt', (directory + '/compiled/' + '1x' + '/' + str(dt_object) +
                     '/' + str(dn_object) + '/' + str(i) + '.bin'))
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
@@ -174,7 +176,7 @@ for i in range(16):
         # checking if it is a file
         if os.path.isfile(f):
             print('[1] FILE:', f)
-            compress('nt', full)
+            compress(directory + '/tools/nt', full)
             write_to(f, full)
         
         if os.path.isdir(s):
@@ -185,7 +187,7 @@ for i in range(16):
                 if os.path.isfile(f):
                     print('[2] FILE:', f)
                     print('   To:', full)
-                    compress('nt', full)
+                    compress(directory + '/tools/nt', full)
                     write_to(f, full)
                 
                 if os.path.isdir(d):
@@ -196,7 +198,7 @@ for i in range(16):
                         if os.path.isfile(f):
                             print('[3] FILE:', f)
                             print('   To:', full)
-                            compress('nt', full)
+                            compress(directory + '/tools/nt', full)
                             write_to(f, full)
                         
                         if os.path.isdir(h):
@@ -207,7 +209,7 @@ for i in range(16):
                                 if os.path.isfile(f):
                                     print('[4] FILE:', f)
                                     print('   To:', full)
-                                    compress('nt', full)
+                                    compress(directory + '/tools/nt', full)
                                     write_to(f, full)
                                 
                                 if os.path.isdir(r):
@@ -218,7 +220,7 @@ for i in range(16):
                                         if os.path.isfile(f):
                                             print('[5] FILE:', f)
                                             print('   To:', full)
-                                            compress('nt', full)
+                                            compress(directory + '/tools/nt', full)
                                             write_to(f, full)
                                         
                                         if os.path.isdir(v):
@@ -229,7 +231,7 @@ for i in range(16):
                                                 if os.path.isfile(f):
                                                     print('[6] FILE:', f)
                                                     print('   To:', full)
-                                                    compress('nt', full)
+                                                    compress(directory + '/tools/nt', full)
                                                     write_to(f, full)
                                                 
                                                 if os.path.isdir(l):
@@ -240,7 +242,7 @@ for i in range(16):
                                                         if os.path.isfile(f):
                                                             print('[7] FILE:', f)
                                                             print('   To:', full)
-                                                            compress('nt', full)
+                                                            compress(directory + '/tools/nt', full)
                                                             write_to(f, full)
                                                         
                                                         if os.path.isdir(e):
@@ -251,7 +253,7 @@ for i in range(16):
                                                                 if os.path.isfile(f):
                                                                     print('[8] FILE:', f)
                                                                     print('   To:', full)
-                                                                    compress('nt', full)
+                                                                    compress(directory + '/tools/nt', full)
                                                                     write_to(f, full)
                                                                 
                                                                 if os.path.isdir(n):

@@ -1,0 +1,124 @@
+missile{
+    ref center{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    nose noseCone{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    part body{
+        locX = 0
+        locY = 0
+        locZ = 10
+        rot = 0
+        diam = 10
+	}
+    engine mainEngine{
+        locX = 0
+        locY = 0
+        locZ = 20
+        rot = 0
+        ord{
+         chamberVolumeSQcm = 1200
+         IGNTemp = 1450
+         Ispeed = 12.4
+         type = 'Bipropellant'
+        }
+	}
+    fin wingFin1{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 0
+        profile = LP_Delta
+        l = 15
+        w = 30
+        decal{
+            type = 'Stripe'
+            color = '00000f'
+        }
+    }
+    fin wingFin2{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 180
+        profile = LP_Delta
+        l = 15
+        w = 30
+	}
+    fin tailFin1{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV1'
+        }
+
+	}
+    fin tailFin2{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV2'
+        }
+	}
+    fin tailFin3{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = TP_Straight_Sq
+        l = 5
+        w = 10
+        cont{
+            type = 'Full'
+            control = 'SRV3'
+        }
+	}
+    control avionics{
+        locX = 0
+        locY = 0
+        locZ = 3
+        rot = 0
+        type = 'MCU_AVRX_DSTL'
+        rs{
+            CPU = 'AVRX 240 AVION'
+            heatsinkCPU = True
+            PSUType = 'NTD 5-15V'
+        }
+
+        ctrl{
+            outputsCNTR{
+                SRV1 = OUT1
+                SRV2 = OUT2
+                SRV3 = OUT3
+            }
+        }
+
+        data{
+            limits = [20, 20]
+            course = ProgCRSInput
+
+        }
+        gyro{
+            type = 'LRG'
+        }
+	}
+}

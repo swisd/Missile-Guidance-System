@@ -1,0 +1,190 @@
+$missile
+name = 'DTR-45D Boxfish II'
+units_mass = 'lb'
+units_measure = 'cm_metric'
+warhead = 'HEATR-F(a)'
+warhead_mass_lb = 45
+Wingspan = 45.72
+Diameter = 30.4
+Length = 193
+Range = 250
+Speed = 10
+
+missile{
+    ref center{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+	}
+    nose noseCone{
+        locX = 0
+        locY = 0
+        locZ = 0
+        rot = 0
+        shape = 'Paraboloid-Efficient'
+	}
+    part body{
+        locX = 0
+        locY = 0
+        locZ = 10
+        rot = 0
+        shape{
+            shape = 'Cylinder'
+            diam = 10
+        }
+	}
+    engine mainEngine{
+        locX = 0
+        locY = 0
+        locZ = 20
+        rot = 0
+        ord{
+         chamberVolumeSQcm = 1200
+         IGNTemp = 1450
+         Ispeed = 12.4
+         type = 'Bipropellant'
+        }
+	}
+    fin wingFin1{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 0
+        profile = 'LP_Delta'
+        length = 15
+        width = 30
+        decal{
+            type = 'Stripe'
+            color = '00000f'
+        }
+    }
+    fin wingFin2{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 90
+        profile = 'LP_Delta'
+        length = 15
+        width = 30
+	}
+	fin wingFin3{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = 180
+        profile = 'LP_Delta'
+        length = 15
+        width = 30
+	}
+	fin wingFin4{
+        locX = 0
+        locY = 5
+        locZ = 12
+        rot = -90
+        profile = 'LP_Delta'
+        length = 15
+        width = 30
+	}
+    fin tailFin1{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        profile = 'TP_Straight_Sq'
+        length = 5
+        width = 10
+        cont{
+            type = 'Full'
+            control = 'SRV1'
+        }
+        decal{
+            type = 'Stripe'
+            color = '00000f'
+        }
+
+	}
+    fin tailFin2{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 90
+        profile = 'TP_Straight_Sq'
+        length = 5
+        width = 10
+        cont{
+            type = 'Full'
+            control = 'SRV2'
+        }
+	}
+    fin tailFin3{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = 180
+        profile = 'TP_Straight_Sq'
+        length = 5
+        width = 10
+        cont{
+            type = 'Full'
+            control = 'SRV3'
+        }
+	}
+
+    fin tailFin4{
+        locX = 0
+        locY = 0
+        locZ = 26
+        rot = -90
+        profile = 'TP_Straight_Sq'
+        length = 5
+        width= 10
+        cont{
+            type = 'Full'
+            control = 'SRV4'
+        }
+	}
+
+	box tailBox{
+	    locX = 0
+        locY = 0
+        locZ = 26
+        rot = 0
+        widthA = 10
+        widthB = 11
+        thick = 1
+        height = 5
+	}
+
+
+    control avionics{
+        locX = 0
+        locY = 0
+        locZ = 3
+        rot = 0
+        type = 'AVRX DTR-45D Boxfish Flight Computer'
+        rs{
+            CPU = 'STM32F405RGTx'
+            heatsinkCPU = True
+            PSUType = 'Onboard'
+        }
+
+        ctrl{
+            outputsCNTR{
+                SRV1 = OUT1
+                SRV2 = OUT2
+                SRV3 = OUT3
+                SRV4 = OUT4
+            }
+        }
+
+        data{
+            limits = [80, 80]
+            course = ProgCRSInput(input)
+
+        }
+        gyro{
+            type = 'LRG'
+        }
+	}
+}
