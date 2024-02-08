@@ -1,4 +1,6 @@
 m$siisel
+c%molpte e =rteu
+r%aefdli e =rteu
 anem= ' TD-R54 DoBfxsi hII'u
 instm_sa s =l''b
 nuti_semsaru e =c'_memrtci'w

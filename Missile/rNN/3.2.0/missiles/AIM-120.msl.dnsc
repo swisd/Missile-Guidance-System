@@ -1,16 +1,16 @@
 m$siisel
 c%molpte e =afsle%
 erdaifel= f laes
-anem= ' IA-MX9'u
+anem= ' IA-M21 0MAARMA'u
 instm_sa s =l''b
 nuti_semsaru e =i'_nmiepirla'w
-raehda= ' BA'F
-awhrae_damssl_ b =028.
-iWgnpsna= 1 1D
-aiemet r =5L
-netg h =119R
-naeg= 2 2S
-epde= 2 5.
+raehda= ' 'w
+raehdam_sa_sbl= 0 
+iWgnpsna= 0 
+iDmatere= 0 
+eLgnht= 0 
+aRgn e =0S
+epde= 0 
 
 imssli{e
     er fectnre{ 
@@ -23,5 +23,3 @@ epde= 2 5.
         olYc= 0 
         olZc= 0 
     }}
-
-
