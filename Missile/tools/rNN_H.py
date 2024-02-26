@@ -4,6 +4,7 @@ import py_compile
 import os
 import time
 from datetime import datetime
+from unicodedata import decimal
 
 import Missile
 
@@ -41,6 +42,10 @@ if not os.path.exists(Missile.__version__) == True:
         os.makedirs(directory + '/rNN/' + Missile.__version__ + '/indexes/')
     else:
         pass
+    if not os.path.exists('/keys/'):
+        os.makedirs(directory + '/rNN/' + Missile.__version__ + '/keys/')
+    else:
+        pass
 else:
     pass
 screen = False
@@ -66,7 +71,7 @@ def out(file: object, output: object, mode: object) -> object:
     :param output:
     :return:
     """
-    # todo: encryption updates for proper encryption to .pth files
+    #todo: encryption updates for proper encryption to .pth files
     if 'dnsc-pth' == mode:
         with open(file, "rb") as _f:
            current_file = _f.read()
@@ -97,6 +102,21 @@ def out(file: object, output: object, mode: object) -> object:
                 _w.write(bytes(vn, encoding='utf-16-le', errors='ignore')) # Ignore errors on exception
                 _w.close()
         _f.close()
+    elif mode == 'hex':
+        with open(file, "rb") as _f:
+           current_file = _f.read()
+
+        vn = (str(current_file).encode('utf-16')).hex()
+
+        if not os.path.exists(output):
+            with open(output, "xb") as _x:
+                _x.write(bytes(vn, encoding='utf-8', errors='ignore')) # Ignore errors on exception
+                _x.close()
+        else:
+            with open(output, "wb") as _w:
+                _w.write(bytes(vn, encoding='utf-8', errors='ignore')) # Ignore errors on exception
+                _w.close()
+        _f.close()
 
 for filename in os.listdir(modelsDIR):
     iterate += 1
@@ -109,6 +129,7 @@ for filename in os.listdir(modelsDIR):
         comp: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/missiles/' + file_label + '.dnsc'
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/missiles/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
+        klist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/keys/indexKey' + str(iterate) + str((file_label.encode('utf-8')).hex()) + '.key'
 
         with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
@@ -121,10 +142,11 @@ for filename in os.listdir(modelsDIR):
         print('[1] FILE:', f)
         size += os.path.getsize(f)
         out('disklist.e.idl', nlist, mode='bin-flex')
+        out('compression.key', klist, mode='hex')
 
     time.sleep(0.05)
 print('Compressing...')
-time.sleep(2)
+#time.sleep(2)
 for filename in os.listdir(modelsDIR):
     f = os.path.join(modelsDIR, filename)
     # checking if it is a file
@@ -143,7 +165,7 @@ for filename in os.listdir(modelsDIR):
         out(f, flex, mode='bin-flex')
     time.sleep(0.05)
 print('Finalizing...')
-time.sleep(2)
+#time.sleep(2)
 
 for filename in os.listdir(targetsDIR):
     iterate += 1
@@ -156,6 +178,7 @@ for filename in os.listdir(targetsDIR):
         comp: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/targets/' + file_label + '.dnsc'
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/targets/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
+        klist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/keys/indexKey' + str(iterate) + str((file_label.encode('utf-8')).hex()) + '.key'
 
         with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
@@ -168,10 +191,11 @@ for filename in os.listdir(targetsDIR):
         print('[1] FILE:', f)
         size += os.path.getsize(f)
         out('disklist.e.idl', nlist, mode='bin-flex')
+        out('compression.key', klist, mode='hex')
 
     time.sleep(0.05)
 print('Compressing...')
-time.sleep(2)
+#time.sleep(2)
 for filename in os.listdir(targetsDIR):
     f = os.path.join(targetsDIR, filename)
     # checking if it is a file
@@ -190,7 +214,7 @@ for filename in os.listdir(targetsDIR):
         out(f, flex, mode='bin-flex')
     time.sleep(0.05)
 print('Finalizing...')
-time.sleep(2)
+#time.sleep(2)
 
 for filename in os.listdir(launchersDIR):
     iterate += 1
@@ -203,6 +227,7 @@ for filename in os.listdir(launchersDIR):
         comp: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/launchers/' + file_label + '.dnsc'
         flex: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/launchers/' + file_label + '.flex'
         nlist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/indexes/index' + str(iterate) + '.i'
+        klist: str = str(directory) + '/rNN/' + str(Missile.__version__) + '/keys/indexKey' + str(iterate) + str((file_label.encode('utf-8')).hex()) + '.key'
 
         with open('disklist.e.idl', "w+") as ns:
             ns.write(path + "\n")
@@ -215,10 +240,11 @@ for filename in os.listdir(launchersDIR):
         print('[1] FILE:', f)
         size += os.path.getsize(f)
         out('disklist.e.idl', nlist, mode='bin-flex')
+        out('compression.key', klist, mode='hex')
 
     time.sleep(0.05)
 print('Compressing...')
-time.sleep(2)
+#time.sleep(2)
 for filename in os.listdir(launchersDIR):
     f = os.path.join(launchersDIR, filename)
     # checking if it is a file
@@ -237,4 +263,4 @@ for filename in os.listdir(launchersDIR):
         out(f, flex, mode='bin-flex')
     time.sleep(0.05)
 print('Finalizing...')
-time.sleep(2)
+#time.sleep(2)
