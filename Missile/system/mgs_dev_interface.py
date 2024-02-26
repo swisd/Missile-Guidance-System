@@ -7,6 +7,7 @@ import Missile
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
+from tkinter.filedialog import askopenfile
 
 virt_alt: int = 1
 valueError: str = "Error. Impossible values."
@@ -75,6 +76,69 @@ def course(d_p: int, d_m: int, s_a: int) -> object:
     corrective_commands.ns_t()
     print()
     return 'Course INT:', (d_p * 2 / (d_m * d_p)) / ((d_m ** 2) / s_a)
+
+
+def info():
+    """
+    Information about host device.
+    :rtype: object
+    """
+    print("System Data:")
+    print("  System:", platform.system())
+    print("  CPU:")
+    print("    CPU Cores:", os.cpu_count())
+    print("    CPU Type:", "11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00 GHz")
+    print("    Desc:", platform.processor())
+    print("    VT:", '~_VT')
+    print("    CPU Temp:", "N/A")
+    print("  GPU:")
+    print("    GPU Cores:", "N/A")
+    print("    GPU Type:", "Intel(R) Iris(R) Xe Graphics")
+    print("    VT:", '+_KT_co')
+    print("    GPU Temp:", "N/A")
+    print()
+
+
+cpitch = 0
+cyaw = 0
+croll = 0
+# On run
+print('--------------------------------------')
+print('   Missile Guidance System V2.7.1     ')
+print(' [DSM 10] [PY 3.10] [WIN11] [DTR-45D] ')
+print('--------------------------------------')
+print(direct('/system'))
+print()
+stat()
+info()
+
+print(course(524, 216, 158))
+
+
+class Interface():
+    # Design window
+    # Creating the Canvas
+    root = Tk()
+    # Title of the window
+    root.title("mgs_dev_1.0.0")
+    root.resizable(0, 0)
+    root.geometry("500x620")
+
+    # Button
+    def course(d_p: int, d_m: int, s_a: int) -> object:
+        """
+        Course-Specific Calculations
+        :return:
+        :rtype: int
+        :param d_p:
+        :param d_m:
+        :param s_a:
+        :return:
+        """
+
+        corrective_commands.ns_t()
+        print()
+        return 'Course INT:', (d_p * 2 / (d_m * d_p)) / ((d_m ** 2) / s_a)
 
 
 def info():
@@ -189,6 +253,7 @@ def pitch(u_d, intgh, nr: object):
     elif u_d == 'down':
         r = nr + intgh
         return r
+    print("Pitch CMD")
 
 
 def yaw(l_r, intgh, nr: object):
@@ -202,6 +267,7 @@ def yaw(l_r, intgh, nr: object):
     elif l_r == 'left':
         r = nr + intgh
         return r
+    print("Yaw CMD")
 
 
 def roll(l_r, intgh, nr: object):
@@ -215,29 +281,16 @@ def roll(l_r, intgh, nr: object):
     elif l_r == 'left':
         r = nr + intgh
         return r
+    print("Roll CMD")
 
-cpitch = 0
-cyaw = 0
-croll = 0
-# On run
-print('--------------------------------------')
-print('   Missile Guidance System V2.7.1     ')
-print(' [DSM 10] [PY 3.10] [WIN11] [DTR-45D] ')
-print('--------------------------------------')
-print(direct('/system'))
-print()
-stat()
-info()
-print(course(524, 216, 158))
-# Design window
-# Creating the Canvas
-root = Tk()
-# Title of the window
-root.title("mgs_dev_1.0.0")
-root.resizable(1, 1)
-root.geometry("400x520")
 
-# Button
+def openfil():
+    """
+
+    """
+    filename = askopenfile()
+    print(filename)
+
 
 b1 = Button(
     height=2, width=4,
@@ -245,70 +298,131 @@ b1 = Button(
     text='Yaw \nLeft',
     foreground='green',
     command=yaw('left', 5, cyaw))
-b1.grid(row=1, column=1)
+b1.grid(row=2, column=1)
 b2 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='Roll \nLeft',
     foreground='blue',
     command=roll('left', 5, croll))
-b2.grid(row=2, column=1)
+b2.grid(row=3, column=1)
 b3 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='STAB \nAUG',
     foreground='orange',
+    activebackground='black',
+    background='white',
+    activeforeground='white',
     command='')
-b3.grid(row=3, column=1)
+b3.grid(row=4, column=1)
 b4 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='Pitch \nDown',
     foreground='purple',
     command=pitch('down', 5, cpitch))
-b4.grid(row=1, column=2)
+b4.grid(row=2, column=2)
 b5 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='CONF \nOK',
     foreground='red',
     command='')
-b5.grid(row=2, column=2)
+b5.grid(row=3, column=2)
 b6 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='Pitch \nUp',
     foreground='purple',
     command=pitch('up', 5, cpitch))
-b6.grid(row=3, column=2)
+b6.grid(row=4, column=2)
 b7 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='Yaw \nRight',
     foreground='green',
     command=yaw('right', 5, cyaw))
-b7.grid(row=1, column=3)
+b7.grid(row=2, column=3)
 b8 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='Roll \nRight',
     foreground='blue',
     command=roll('right', 5, croll))
-b8.grid(row=2, column=3)
+b8.grid(row=3, column=3)
 b9 = Button(
     height=2, width=4,
     font=("Helvetica", "10"),
     text='RCS',
     foreground='orange',
+    activebackground='black',
+    background='white',
+    activeforeground='white',
     command='')
-b9.grid(row=3, column=3)
-"""t1 = Text(
-    height=2, width=3,
-    font=("Helvetica", "10"))
-t1.grid(row=1, column=4)"""
+b9.grid(row=4, column=3)
 
+b11 = Button(
+    height=2, width=4,
+    font=("Helvetica", "10"),
+    text='Move \nLeft',
+    foreground='grey',
+    command='')
+b11.grid(row=8, column=1)
+b12 = Button(
+    height=2, width=4,
+    font=("Helvetica", "10"),
+    text='Move \nRight',
+    foreground='grey',
+    command='')
+b12.grid(row=8, column=3)
+b13 = Button(
+    height=2, width=4,
+    font=("Helvetica", "10"),
+    text='Move \nUp',
+    foreground='grey',
+    command='')
+b13.grid(row=7, column=2)
+b14 = Button(
+    height=2, width=4,
+    font=("Helvetica", "10"),
+    text='Move \nDown',
+    foreground='grey',
+    command='')
+b14.grid(row=9, column=2)
 
+l1 = Label(
+    height=2, width=12,
+    font=("Helvetica", "10"),
+    text='Missile Controls')
+l1.grid(row=1, column=1, columnspan=4)
+l2 = Label(
+    height=2, width=12,
+    font=("Helvetica", "10"),
+    text='Camera Controls')
+l2.grid(row=6, column=1, columnspan=4)
+l3 = Label(
+    height=2, width=12,
+    font=("Helvetica", "10"),
+    text='Viewer')
+l3.grid(row=1, column=4, columnspan=4)
+l4 = Label(
+    height=2, width=12,
+    font=("Helvetica", "10"),
+    text='Course')
+l4.grid(row=11, column=4, columnspan=2)
 
-
+can1 = Canvas(height=300, width=350)
+can1.grid(row=2, rowspan=10, column=5, columnspan=20)
+can1.create_rectangle(1, 1, 350, 300)
+can2 = Canvas(height=50, width=100)
+can2.grid(row=12, rowspan=10, column=5, columnspan=1)
+can2.create_rectangle(1, 1, 99, 49)
+b10 = Button(
+    height=1, width=8,
+    font=("Helvetica", "5"),
+    text='Open Model...',
+    command=openfil())
+b10.grid(row=5, column=1)
 
 mainloop()
